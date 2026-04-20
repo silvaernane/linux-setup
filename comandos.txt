@@ -1,0 +1,63 @@
+# Debian / ubuntu setup – manual command list
+# ==================================
+
+## Rode o comando de cada etapa separadamente
+
+## 1. Atualize o APT e instale pacotes básicos 
+sudo apt update
+sudo apt install -y git curl zip zsh \
+                    gnome-tweaks wget
+
+## 2. Instalar LSD, versão melhorada do comando 'ls'
+sudo apt install lsd
+
+## 3. Instalar Atuin, melhor histórico de comandos quando aperta seta pra cima ou CTRL + R no terminal
+curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
+
+## 4. Instale Oh My Zsh, tema Powerlevel10k e plugins (melhora ainda mais o terminal)
+# Oh My Zsh
+RUNZSH=no CHSH=no KEEP_ZSHRC=yes \
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+## Difinir ZSH como terminal padrão
+chsh -s $(which zsh)
+
+## Baixar fonts
+- https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf
+- https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf
+- https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf
+- https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf
+
+## Dois cliques nas fonts para instalar
+
+## Vá nas configurações do terminal e defina a font como FiraCode
+
+-----------------------------------------------------------
+## Todos esses comandos até a próxima separação devem ser colados e executados de uma vez no terminal
+
+# Diretório custom (COPIE DAQUI...)
+ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+
+# Tema Powerlevel10k
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
+  "$ZSH_CUSTOM/themes/powerlevel10k"
+
+# Plugins adicionais
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+git clone https://github.com/MichaelAquilina/zsh-you-should-use.git $ZSH_CUSTOM/plugins/you-should-use
+
+### Ajuste do ~/.zshrc (tema + plugins)
+cp -n "$HOME/.oh-my-zsh/templates/zshrc.zsh-template" "$HOME/.zshrc"   # cria se não existir
+sed -i 's/^ZSH_THEME=.*/ZSH_THEME="powerlevel10k\/powerlevel10k"/' "$HOME/.zshrc"
+sed -i 's/^plugins=.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use)/' "$HOME/.zshrc"
+
+## (ATÉ AQUI)
+
+----------------------------------------------------------
+
+## Instalar linux toys (utilitário que facilita a vida)
+curl -fsSL https://linux.toys/install.sh | bash
+
+## Recomendo adicionar o alias para o lsd no terminal (arquivo .zshrc na HOME)
+alias ls='lsd'
